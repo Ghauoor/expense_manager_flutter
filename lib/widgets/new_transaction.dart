@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:expense_manager/widgets/adaptive_button.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -18,13 +22,13 @@ class _NewTransactionState extends State<NewTransaction> {
 
   //When try to add transaction this method will trigger
   void _submitData() {
-    if(_amountController.text.isEmpty){
+    if (_amountController.text.isEmpty) {
       return;
     }
     final enteredTitle = _titleController.text;
     final enteredAmount = double.parse(_amountController.text);
 
-    if (enteredTitle.isEmpty || enteredAmount <= 0 || _selectedDate == null ) {
+    if (enteredTitle.isEmpty || enteredAmount <= 0 || _selectedDate == null) {
       return;
     }
     //can use property of widget class inside the state class
@@ -58,56 +62,56 @@ class _NewTransactionState extends State<NewTransaction> {
   @override
   Widget build(BuildContext context) {
     //user data
-    return Card(
-      elevation: 5,
-      child: Container(
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            TextField(
-              autocorrect: true,
-              decoration: const InputDecoration(labelText: 'Tittle'),
-              controller: _titleController,
-              onSubmitted: (_) => _submitData(),
-              //  onChanged: (val) => tittleInput = val,
-            ),
-            TextField(
-              autocorrect: true,
-              decoration: const InputDecoration(labelText: 'Amount'),
-              keyboardType: TextInputType.number,
-              onSubmitted: (_) => _submitData(),
-              controller: _amountController,
-              // onChanged: (val) => amountInput = val,
-            ),
-            Container(
-              height: 70,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      _selectedDate == null
-                          ? 'No Date Chosen!'
-                          : DateFormat.yMMMEd().format(_selectedDate!) as String,
-                    ),
-                  ),
-                  TextButton(
-                    style: TextButton.styleFrom(
-                        onSurface: Theme.of(context).primaryColor,
-                        textStyle:
-                            const TextStyle(fontWeight: FontWeight.bold)),
-                    onPressed: _presentDatePicker,
-                    child: const Text('Choose Date'),
-                  ),
-                ],
+    return SingleChildScrollView(
+      child: Card(
+        elevation: 5,
+        child: Container(
+          padding: EdgeInsets.only(
+              top: 10,
+              left: 10,
+              right: 10,
+              bottom: MediaQuery.of(context).viewInsets.bottom + 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              TextField(
+                autocorrect: true,
+                decoration: const InputDecoration(labelText: 'Tittle'),
+                controller: _titleController,
+                onSubmitted: (_) => _submitData(),
+                //  onChanged: (val) => tittleInput = val,
               ),
-            ),
-            ElevatedButton(
-              onPressed: _submitData,
-              child: const Text('Add Transaction'),
-              //  style: TextButton.styleFrom(primary: Colors.purple),
-            )
-          ],
+              TextField(
+                autocorrect: true,
+                decoration: const InputDecoration(labelText: 'Amount'),
+                keyboardType: TextInputType.number,
+                onSubmitted: (_) => _submitData(),
+                controller: _amountController,
+                // onChanged: (val) => amountInput = val,
+              ),
+              Container(
+                height: 70,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        _selectedDate == null
+                            ? 'No Date Chosen!'
+                            : DateFormat.yMMMEd().format(_selectedDate!),
+                      ),
+                    ),
+                    AdaptiveButton(
+                        text: 'Choose Date', handler: _presentDatePicker)
+                  ],
+                ),
+              ),
+              ElevatedButton(
+                onPressed: _submitData,
+                child: const Text('Add Transaction'),
+                //  style: TextButton.styleFrom(primary: Colors.purple),
+              )
+            ],
+          ),
         ),
       ),
     );
